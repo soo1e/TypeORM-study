@@ -2,7 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    Generated, OneToMany, OneToOne,
+    Generated, JoinColumn, OneToMany, OneToOne,
     PrimaryColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
@@ -93,7 +93,27 @@ export class UserModel {
     @Generated('uuid')
     additionalId: string;
 
-    @OneToOne(()=> ProfileModel, (profile)=> profile.user)
+    @OneToOne(()=> ProfileModel, (profile)=> profile.user, {
+        // find() 실행 할 때마다 항상 같이 가져올 relation -> eager
+        eager: true,
+
+        // 저장 할 때 realation을 한 번에 같이 저장
+        cascade: true,
+
+        // nullable
+        nullable: true,
+
+        // on : ~ 했을 때 -> on delete 삭제 했을 때
+        // 관계가 삭제되었을 때
+        // no action -> 아무것도 안 함
+        // cascade -> 참조하는 Row도 같이 삭제
+        // set null -> 참조하는 Row에서 참조 id를 null로 변경
+        // set default -> 기본 세팅으로 설정 (테이블의 기본 세팅)
+        // restrict -> 참조하고 있는 Row가 있는 경우 참조 당하는 Row 삭제 불가
+        onDelete: 'SET NULL',
+
+    })
+    @JoinColumn()
     profile: ProfileModel;
 
     @OneToMany(()=> PostModel, (post)=> post.author)

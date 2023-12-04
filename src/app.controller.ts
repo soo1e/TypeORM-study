@@ -1,4 +1,4 @@
-import {Controller, Get, Param, Patch, Post} from '@nestjs/common';
+import {Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {UserModel} from "./entity/user.entity";
@@ -51,6 +51,11 @@ export class AppController {
     return this.userRepository.save({
       ...user,
     })
+  }
+
+  @Delete('user/profile/:id')
+  async deleteProfile(@Param('id') id: string,){
+    await this.profileRepository.delete(+id);
   }
 
   @Post('user/profile')
