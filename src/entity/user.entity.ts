@@ -110,7 +110,7 @@ export class UserModel {
         // set null -> 참조하는 Row에서 참조 id를 null로 변경
         // set default -> 기본 세팅으로 설정 (테이블의 기본 세팅)
         // restrict -> 참조하고 있는 Row가 있는 경우 참조 당하는 Row 삭제 불가
-        onDelete: 'SET NULL',
+        onDelete: 'RESTRICT',
 
     })
     @JoinColumn()
@@ -118,4 +118,7 @@ export class UserModel {
 
     @OneToMany(()=> PostModel, (post)=> post.author)
     posts: PostModel[];
+
+    @Column({default: 0,})
+    count: number;
 }
